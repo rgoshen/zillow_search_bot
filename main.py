@@ -16,10 +16,19 @@ headers = {
                   "Safari/537.36 "
 }
 
+all_links = []
+
 # zillow search
 response = requests.get(url=zillow_url, headers=headers)
 return_webpage = response.text
 soup = BeautifulSoup(return_webpage, 'html.parser')
 
 # list of links returned
+all_link_elements = soup.select(".list-card-info a")
+for link in all_link_elements:
+    href = link["href"]
+    if "http" not in href:
+        all_links.append(f"https://www.zillow.com{href}")
+    else:
+        all_links.append(href)
 
