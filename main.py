@@ -17,6 +17,8 @@ headers = {
 }
 
 all_links = []
+all_prices = []
+all_addresses = []
 
 # zillow search
 response = requests.get(url=zillow_url, headers=headers)
@@ -31,4 +33,20 @@ for link in all_link_elements:
         all_links.append(f"https://www.zillow.com{href}")
     else:
         all_links.append(href)
+
+# list of all prices
+all_price_elements = soup.select(".list-card-heading")
+for element in all_price_elements:
+    # Get the prices. Single and multiple listings have different tag & class structures
+    try:
+        # Price with only one listing
+        price = element.select(".list-card-price")[0].contents[0]
+    except IndexError:
+        print('Multiple listings for the card')
+        # Price with multiple listings
+        price = element.select(".list-card-details li")[0].contents[0]
+    finally:
+        all_prices.append(price)
+
+# list for all addresses
 
